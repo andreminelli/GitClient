@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
+using GitClient.Core;
+
 namespace GitClient.App.Pages.Main;
 
 public partial class MainViewModel : ObservableObject
@@ -9,6 +11,6 @@ public partial class MainViewModel : ObservableObject
 
     public MainViewModel()
     {
-        _text = "Bem vindo ao MVVM";
+        _text = RepositoryService.GetStatus(@"E:\source\GitClient");
     }
 }
