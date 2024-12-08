@@ -3,12 +3,11 @@
     x:Class="GitClient.App.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:GitClient.App"
+    xmlns:local="clr-namespace:GitClient.App.Pages.Main"
     Shell.FlyoutBehavior="Disabled"
     Title="GitClient.App">
 
     <ShellContent
-        Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 
