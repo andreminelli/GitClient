@@ -5,12 +5,25 @@
              xmlns:vm="clr-namespace:GitClient.App.Pages.Main"
              x:DataType="vm:MainViewModel"
              x:Class="GitClient.App.Pages.Main.MainPage">
-    <ScrollView>
-        <VerticalStackLayout>
+    <VerticalStackLayout>
+        <HorizontalStackLayout>
             <Label 
-            Text="{Binding Text}"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        </VerticalStackLayout>
-    </ScrollView>
+                Text="URL Repositório:"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+            <Entry
+                Placeholder="URL"
+                Text="{Binding Url}" />
+        </HorizontalStackLayout>
+        <HorizontalStackLayout>
+            <Label 
+                Text="Pasta de trabalho:"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+            <Entry
+                Placeholder="Pasta"
+                Text="{Binding Path}" />
+        </HorizontalStackLayout>
+        <Button Text="Clonar" Command="{Binding CloneCommand}"/>
+    </VerticalStackLayout>
 </ContentPage>
