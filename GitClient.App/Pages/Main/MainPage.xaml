@@ -2,25 +2,30 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:vm="clr-namespace:GitClient.App.Pages.Main"
-             x:DataType="vm:MainViewModel"
+             xmlns:viewModel="clr-namespace:GitClient.App.Pages.Main"
+             x:DataType="viewModel:MainViewModel"
              x:Class="GitClient.App.Pages.Main.MainPage">
-    <VerticalStackLayout>
-        <HorizontalStackLayout>
+    <VerticalStackLayout Spacing="10" Padding="10">
+        <HorizontalStackLayout Spacing="5" Padding="5">
             <Label 
                 Text="URL Repositório:"
-                Margin="0 10 0 10"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center" />
             <Entry
                 Placeholder="URL"
                 WidthRequest="400"
-                Text="{Binding Url}" />
+                Text="{Binding Url}">
+                <Entry.Behaviors>
+                    <toolkit:UriValidationBehavior UriKind="Absolute" 
+                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                        Flags="ValidateOnUnfocusing"
+                        />
+                </Entry.Behaviors>
+            </Entry>
         </HorizontalStackLayout>
-        <HorizontalStackLayout>
+        <HorizontalStackLayout Spacing="5" Padding="5">
             <Label 
                 Text="Pasta de trabalho:"
-                Margin="0 10 0 10"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center" />
             <Entry
@@ -28,7 +33,6 @@
                 Text="{Binding Path}" />
         </HorizontalStackLayout>
         <Button 
-            Margin="10"            
             Text="Clonar" 
             Command="{Binding CloneCommand}"/>
     </VerticalStackLayout>

@@ -11,9 +11,11 @@ namespace GitClient.App.Pages.Main;
 public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CloneCommand))]
     private string _url;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CloneCommand))]
     private string _path;
 
     public MainViewModel()
@@ -22,7 +24,7 @@ public partial class MainViewModel : ObservableObject
         _path = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "repos");
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanClone))]
     public void Clone()
     {
         var repo = Repository.Clone(Url, Path, new CloneOptions(
@@ -37,6 +39,9 @@ public partial class MainViewModel : ObservableObject
         );
         Debug.WriteLine(repo);
     }
+
+    private bool CanClone() 
+        => Uri.IsWellFormedUriString(Url, UriKind.Absolute) && !string.IsNullOrWhiteSpace(Path);
 
     private void OnCheckoutProgress(string path, int completedSteps, int totalSteps)
     {
