@@ -25,12 +25,9 @@ public static class MauiProgram
 #endif
 
         RegisterViews(builder.Services);
-        RegisterViewModels(builder.Services);
 
         return builder.Build();
     }
 
-    private static void RegisterViews(IServiceCollection services) => services.AddSingleton<MainPage>();
-
-    private static void RegisterViewModels(IServiceCollection services) => services.AddSingleton<MainViewModel>();
+    private static void RegisterViews(IServiceCollection services) => services.AddSingleton<MainPage, MainViewModel>();
 }

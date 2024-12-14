@@ -9,6 +9,7 @@
         <HorizontalStackLayout Spacing="5" Padding="5">
             <Label 
                 Text="URL Repositório:"
+                WidthRequest="130"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center" />
             <Entry
@@ -26,10 +27,12 @@
         <HorizontalStackLayout Spacing="5" Padding="5">
             <Label 
                 Text="Pasta de trabalho:"
+                WidthRequest="130"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center" />
             <Entry
                 Placeholder="Pasta"
+                WidthRequest="400"                
                 Text="{Binding Path}" />
         </HorizontalStackLayout>
         <Button 
