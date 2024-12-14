@@ -9,21 +9,27 @@
         <HorizontalStackLayout>
             <Label 
                 Text="URL Repositório:"
+                Margin="0 10 0 10"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center" />
             <Entry
                 Placeholder="URL"
+                WidthRequest="400"
                 Text="{Binding Url}" />
         </HorizontalStackLayout>
         <HorizontalStackLayout>
             <Label 
                 Text="Pasta de trabalho:"
+                Margin="0 10 0 10"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center" />
             <Entry
                 Placeholder="Pasta"
                 Text="{Binding Path}" />
         </HorizontalStackLayout>
-        <Button Text="Clonar" Command="{Binding CloneCommand}"/>
+        <Button 
+            Margin="10"            
+            Text="Clonar" 
+            Command="{Binding CloneCommand}"/>
     </VerticalStackLayout>
 </ContentPage>
