@@ -1,15 +1,17 @@
-﻿using System.Diagnostics;
-using IO = System.IO;
+﻿using IO = System.IO;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using LibGit2Sharp;
+using GitClient.App.Services;
+using GitClient.App.Dialogs.Cloning;
 
 namespace GitClient.App.Pages.Main;
 
 public partial class MainViewModel : ObservableObject
 {
+    private readonly INavigationService _navigationService;
+
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(CloneCommand))]
     private string _url;
@@ -18,45 +20,26 @@ public partial class MainViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(CloneCommand))]
     private string _path;
 
-    public MainViewModel()
+    public MainViewModel(INavigationService navigationService)
     {
+        _navigationService = navigationService;
+
         _url = "";
         _path = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "repos");
     }
 
     [RelayCommand(CanExecute = nameof(CanClone))]
-    public void Clone()
+    public async Task Clone()
     {
-        var repo = Repository.Clone(Url, Path, new CloneOptions(
-            new FetchOptions 
-            { 
-                OnProgress = OnProgress,
-                OnTransferProgress = OnTransferProgress 
-            })
+        await _navigationService.NavigateToAsync(
+            nameof(CloningViewModel),
+            new Dictionary<string, object>
             {
-                OnCheckoutProgress = OnCheckoutProgress
-            }
-        );
-        Debug.WriteLine(repo);
+                { nameof(Url), Url },
+                { nameof(Path), Path }
+            });
     }
 
     private bool CanClone() 
         => Uri.IsWellFormedUriString(Url, UriKind.Absolute) && !string.IsNullOrWhiteSpace(Path);
-
-    private void OnCheckoutProgress(string path, int completedSteps, int totalSteps)
-    {
-        Debug.WriteLine($"{completedSteps} {totalSteps}");
-    }
-
-    private bool OnProgress(string serverProgressOutput)
-    {
-        Debug.WriteLine(serverProgressOutput);
-        return true;
-    }
-
-    private bool OnTransferProgress(TransferProgress progress)
-    {
-        Debug.WriteLine($"Received: {progress.ReceivedObjects} / {progress.TotalObjects}; Indexed: {progress.IndexedObjects}");
-        return true;
-    }
 }

@@ -52,6 +52,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <MauiXaml Update="Dialogs\Cloning\CloningDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Pages\Main\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

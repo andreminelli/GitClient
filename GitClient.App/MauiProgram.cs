@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 
+using GitClient.App.Dialogs.Cloning;
 using GitClient.App.Pages.Main;
+using GitClient.App.Services;
 
 using Microsoft.Extensions.Logging;
 
@@ -25,9 +27,21 @@ public static class MauiProgram
 #endif
 
         RegisterViews(builder.Services);
+        RegisterServices(builder.Services);
 
         return builder.Build();
     }
 
-    private static void RegisterViews(IServiceCollection services) => services.AddSingleton<MainPage, MainViewModel>();
+    private static void RegisterViews(IServiceCollection services)
+    {
+        services
+            .AddSingletonViewModelWithRoute<MainViewModel, MainPage>()
+            .AddTransientViewModelWithRoute<CloningViewModel, CloningDialog>();
+    }
+
+    private static void RegisterServices(IServiceCollection services)
+    {
+        services
+            .AddSingleton<INavigationService, MauiNavigationService>();
+    }
 }
