@@ -6,8 +6,6 @@ using CommunityToolkit.Mvvm.Input;
 using GitClient.App.Services;
 using GitClient.Core;
 
-using LibGit2Sharp;
-
 namespace GitClient.App.Dialogs.Cloning;
 
 [QueryProperty(nameof(Url), nameof(Url))]
@@ -48,6 +46,7 @@ public partial class CloningViewModel : ObservableObject
 
         try
         {
+            StatusMessage = "Starting to clone";
             var repo = await _repositoryService.Clone(
                 new CloneParameters
                 {
