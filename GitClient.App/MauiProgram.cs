@@ -3,6 +3,7 @@
 using GitClient.App.Dialogs.Cloning;
 using GitClient.App.Pages.Main;
 using GitClient.App.Services;
+using GitClient.Core;
 
 using Microsoft.Extensions.Logging;
 
@@ -42,6 +43,7 @@ public static class MauiProgram
     private static void RegisterServices(IServiceCollection services)
     {
         services
-            .AddSingleton<INavigationService, MauiNavigationService>();
+            .AddSingleton<INavigationService, MauiNavigationService>()
+            .AddSingleton<IRepositoryService, RepositoryService>();
     }
 }

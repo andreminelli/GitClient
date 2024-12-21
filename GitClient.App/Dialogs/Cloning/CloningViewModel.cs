@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using GitClient.App.Services;
+using GitClient.Core;
 
 using LibGit2Sharp;
 
@@ -13,6 +14,7 @@ namespace GitClient.App.Dialogs.Cloning;
 [QueryProperty(nameof(Path), nameof(Path))]
 public partial class CloningViewModel : ObservableObject
 {
+    private readonly IRepositoryService _repositoryService;
     private readonly INavigationService _navigationService;
 
     [ObservableProperty]
@@ -26,33 +28,35 @@ public partial class CloningViewModel : ObservableObject
 
     public string? Path { get; set; }
 
-    public CloningViewModel(INavigationService navigationService)
+    public CloningViewModel(IRepositoryService repositoryService, INavigationService navigationService)
     {
+        _repositoryService = repositoryService;
         _navigationService = navigationService;
     }
 
     [RelayCommand]
     public async Task Start()
     {
+        if (Url is null)
+        {
+            throw new ArgumentNullException(nameof(Url));
+        }
+        if (Path is null) 
+        { 
+            throw new ArgumentNullException(nameof(Path));
+        }
+
         try
         {
-            await Task.Run(() =>
-            {
-                var repo = Repository.Clone(
-                    Url,
-                    Path,
-                    new CloneOptions(
-                        new FetchOptions
-                        {
-                            OnProgress = OnProgress,
-                            OnTransferProgress = OnTransferProgress
-                        })
-                    {
-                        OnCheckoutProgress = OnCheckoutProgress
-                    });
-                StatusMessage = "Cloned";
-                Debug.WriteLine(repo);
-            });
+            var repo = await _repositoryService.Clone(
+                new CloneParameters
+                {
+                    Url = Url,
+                    Path = Path,
+                    ReportProgress = progress => StatusMessage = progress
+                });
+            StatusMessage = "Cloned";
+            Debug.WriteLine(repo);
         }
         catch(Exception e)
         {
@@ -72,24 +76,5 @@ public partial class CloningViewModel : ObservableObject
     }
 
     public bool CanClose() => Finished;
-
-    private void OnCheckoutProgress(string path, int completedSteps, int totalSteps)
-    {
-        Debug.WriteLine($"{completedSteps} {totalSteps}");
-    }
-
-    private bool OnProgress(string serverProgressOutput)
-    {
-        StatusMessage = serverProgressOutput.TrimEnd().Split("\r").Last();
-        //Thread.Sleep(1000);
-        return true;
-    }
-
-    private bool OnTransferProgress(TransferProgress progress)
-    {
-        Debug.WriteLine($"Received: {progress.ReceivedObjects} / {progress.TotalObjects}; Indexed: {progress.IndexedObjects}");
-        return true;
-    }
-
 }
 
